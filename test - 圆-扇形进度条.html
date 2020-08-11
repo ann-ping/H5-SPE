@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+    <meta charset=utf-8>
+    <title>CSS3 扇形</title>
+    <style>
+    /*支持IE9及以上*/
+    .circle-bar { position: relative; width: 128px; height: 128px;background-color: #1EC200;}
+    .circle-bar-left,.circle-bar-right { width: 128px; height: 128px; background-color: #eee; }
+    /*
+        这里采用clip剪切了圆，实现左右两个半圆，右半圆在后面，因此在更上一层，
+        clip的用法参考：http://www.w3school.com.cn/cssref/pr_pos_clip.asp
+     */
+    .circle-bar-right { clip:rect(0,auto,auto,64px); }
+    .circle-bar-left { clip:rect(0,64px,auto,0); }
+    
+    .percent { font-size: 20px; height: 40px; line-height: 40px;}
+    /*所有的后代都水平垂直居中，这样就是同心圆了*/
+    .circle-bar * {  position: absolute; top:0; right:0; bottom:0; left:0; margin:auto; }
+    /*自身以及子元素都是圆*/
+    .circle-bar, .circle-bar > * { border-radius: 50%; }
+
+
+    .review {
+        border: 1px solid transparent;
+        border-radius: 5px;
+        color: #777;
+        display: flex;
+        font-size: 12px;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+    }
+    .progress {
+        background-color: rgba(100, 100, 100, 0.2);
+        border-radius: 5px;
+        position: relative;
+        margin: 0 10px;
+        height: 20px;
+        width: 200px;
+    }
+    .progress-done {
+        background: linear-gradient(to left, #1EC200, rgb(114, 255, 209));
+        box-shadow: 0 3px 3px -5px #1EC200, 0 2px 5px #1EC200;
+        border-radius: 5px;
+        height: 20px;
+        width: 0;
+        transition: width 1s ease 0.3s;
+    }
+    .progress-done2 {
+        height: 20px;
+        width: 0;
+        margin-left: 33%;
+        background: linear-gradient(to left, #1EC200, #1EC200);
+        box-shadow: 0 3px 3px -5px #1EC200, 0 2px 5px #1EC200;
+        border-radius: 5px;
+        transition: width 1s ease 0.3s;
+    }
+    .percent-num {
+        color: #333;
+    }
+
+    </style>
+<script src="js/jquery-1.8.2.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="circle-bar">
+    <div class="circle-bar-left"></div>
+    <div class="circle-bar-right"></div>
+    <!-- 遮罩层，显示百分比 -->
+    <div class="percent"></div>
+</div>
+
+<div style="margin-top: 500px;">
+    <div class="review">
+        <div class="progress">
+            <div class="progress-done2" style="width: 70px"></div>
+            <div style="position: relative;left: 50%;bottom: 20px; width: 5px; height: 20px; background-color: #00A0E9;"></div>
+        </div>
+    </div>
+
+    <div class="review">
+        <div class="progress">
+            <div class="progress-done" style="width: 170px"></div>
+        </div>
+        <span class="percent-num">68%</span>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        
+        setInterval(function (){
+            var percent = (Math.random()*100).toFixed(2) - 0;
+            $('.percent').text(percent+'%');
+            $('.circle-bar-right').css({'transform':'rotate(0deg)','background-color':'#eee'});
+            $('.circle-bar-left').css({'transform':'rotate(0deg)','background-color':'#eee'});
+
+            if( percent<=50 ){
+                $('.circle-bar-right').css('transform','rotate('+(percent*3.6)+'deg)');
+            }else {
+                $('.circle-bar-right').css({
+                    'transform':'rotate(0deg)',
+                    'background-color':'#1EC200'
+                });
+                $('.circle-bar-left').css('transform','rotate('+((percent-50)*3.6)+'deg)');
+            }
+
+        },2000);
+    })
+</script>
+</body>
+</html>
